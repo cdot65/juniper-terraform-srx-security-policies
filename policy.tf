@@ -15,15 +15,34 @@ provider "junos-security-policies" {
   password = var.juniper_user_password
 }
 
-module "security-policies" {
+module "security-policies1" {
   // name of our configuration apply group
-  apply_group_name = "test_sec_policy"
+  apply_group_name = "policy1"
 
   // Security policy 1
   from__zone__name     = "ZONE_TRUST"
   to__zone__name       = "ZONE_UNTRUST"
-  policy_name          = "TF_SEC_POLICY"
-  description          = "Test Security Policy test"
+  policy_name          = "TF_SEC_POLICY1"
+  description          = "Security Policy 1"
+  application          = "any"
+  source__address      = "any"
+  destination__address = "any"
+
+  // passing information into our provider
+  source     = "./secpol"
+  providers  = { junos-security-policies = junos-security-policies }
+  depends_on = [junos-security-policies_destroycommit.commit-main]
+}
+
+module "security-policies2" {
+  // name of our configuration apply group
+  apply_group_name = "policy2"
+
+  // Security policy 1
+  from__zone__name     = "ZONE_TRUST"
+  to__zone__name       = "ZONE_UNTRUST"
+  policy_name          = "TF_SEC_POLICY2"
+  description          = "Security Policy 2"
   application          = "any"
   source__address      = "any"
   destination__address = "any"
@@ -36,7 +55,7 @@ module "security-policies" {
 
 resource "junos-security-policies_commit" "commit-main" {
   resource_name = "commit"
-  depends_on    = [module.security-policies]
+  depends_on    = [module.security-policies1, module.security-policies2]
 }
 
 resource "junos-security-policies_destroycommit" "commit-main" {
