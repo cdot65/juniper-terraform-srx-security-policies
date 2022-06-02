@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "junos-security-policies" {
-  host     = "192.168.110.10"
+  host     = "192.168.105.10"
   port     = var.juniper_ssh_port
   sshkey   = var.juniper_ssh_key
   username = var.juniper_user_name
@@ -20,8 +20,8 @@ module "security-policies1" {
   apply_group_name = "policy1"
 
   // Security policy 1
-  from__zone__name     = "ZONE_TRUST"
-  to__zone__name       = "ZONE_UNTRUST"
+  from__zone__name     = "LAN"
+  to__zone__name       = "WAN"
   policy_name          = "TF_SEC_POLICY1"
   description          = "Security Policy 1"
   application          = "any"
@@ -38,9 +38,9 @@ module "security-policies2" {
   // name of our configuration apply group
   apply_group_name = "policy2"
 
-  // Security policy 1
-  from__zone__name     = "ZONE_TRUST"
-  to__zone__name       = "ZONE_UNTRUST"
+  // Security policy 2
+  from__zone__name     = "LAN"
+  to__zone__name       = "WAN"
   policy_name          = "TF_SEC_POLICY2"
   description          = "Security Policy 2"
   application          = "any"
